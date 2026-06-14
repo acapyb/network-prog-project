@@ -1,11 +1,14 @@
 #include "network_common.h"
+#include <cstring>  // Explicitly include for standard compliance
+#include <string.h> // Include for older MinGW compatibility
 
 void HandleClient(SocketType clientSocket) {
     char buffer[BUFFER_SIZE];
     std::cout << "[SERVER] Host connected successfully.\n";
 
     while (true) {
-        std::memset(buffer, 0, BUFFER_SIZE);
+        // Fixed: Using global namespace ::memset to bypass namespace errors
+        ::memset(buffer, 0, BUFFER_SIZE);
         int bytesReceived = recv(clientSocket, buffer, BUFFER_SIZE, 0);
         
         if (bytesReceived <= 0) {
@@ -28,7 +31,8 @@ void HandleClient(SocketType clientSocket) {
 
             // Stream byte chunks directly into the binary file
             while (true) {
-                std::memset(buffer, 0, BUFFER_SIZE);
+                // Fixed: Using global namespace ::memset here too
+                ::memset(buffer, 0, BUFFER_SIZE);
                 int fileBytes = recv(clientSocket, buffer, BUFFER_SIZE, 0);
                 if (fileBytes <= 0) break;
                 
